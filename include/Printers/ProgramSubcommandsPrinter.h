@@ -6,30 +6,30 @@
 
 class ProgramSubcommandsPrinter {
     public:
-    std::shared_ptr<AbstractSection> print(SubcommandsParser& parser) {
-        auto res = std::make_shared<TextSection>();
-        auto usage = std::make_shared<TextSection>();
-        usage->title_<<"Usage:\n";
+    std::shared_ptr<Section> print(SubcommandsParser& parser) {
+        auto res = std::make_shared<Section>();
+        auto usage = std::make_shared<Section>();
+        usage->title = "Usage:";
         for(auto& subcmd : parser.subcommands_order_) {
-            usage->header_<<"\t"<<shortHelp(parser, subcmd)<<"\n";
+            usage->add_paragraph("\t" + shortHelp(parser, subcmd));
         }
 
-        auto description = std::make_shared<TextSection>();
-        description->title_<<"Detailed description:";
-        description->header_<<parser.program_description;
+        auto description = std::make_shared<Section>();
+        description->title = "Detailed description:";
+        description->add_paragraph(parser.program_description);
 
-        auto details = std::make_shared<TextSection>();
-        details->title_<<"Details:";
+        auto details = std::make_shared<Section>();
+        details->title = "Details:";
         for(auto& subcmd : parser.subcommands_order_) {
             auto ptr = subcmd->second;
             for(auto &it : print(*ptr)) {
-                details->subsections_.push_back(it);
+                details->items.push_back(it);
             }
         }
 
-        res->subsections_.push_back(usage);
-        res->subsections_.push_back(description);
-        res->subsections_.push_back(details);
+        res->items.push_back(usage);
+        res->items.push_back(description);
+        res->items.push_back(details);
         return res;
     }
     std::string shortHelp(SubcommandsParser& parser, SubcommandsParser::subcommands_t::iterator it) const {
@@ -48,8 +48,8 @@ class ProgramSubcommandsPrinter {
         }        
         return str.str();
     }
-    std::vector<std::shared_ptr<AbstractSection>> print(ProgramOptionsParser& parser) {
-        std::vector<std::shared_ptr<AbstractSection>>  res;
+    std::vector<std::shared_ptr<Section>> print(ProgramOptionsParser& parser) {
+        std::vector<std::shared_ptr<Section>>  res;
         for(auto it : parser.groups()) {
             if(!options_groups_printed_already_.contains(it->groupName())) {
                 res.push_back(print(*it));
@@ -58,11 +58,11 @@ class ProgramSubcommandsPrinter {
         }
         return res;
     }
-    std::shared_ptr<AbstractSection> print(OptionsGroup& grp) const {
-        auto res = std::make_shared<TextSection>();
-        res->setTitle(grp.groupName());
-        res->setHeader(grp.description.view());
-        res->body_<<grp.detailedList().view();
+    std::shared_ptr<Section> print(OptionsGroup& grp) const {
+        auto res = std::make_shared<Section>();
+        res->title = grp.groupName();
+        res->add_paragraph(grp.description.str());
+        res->add_paragraph(grp.detailedList().str());
         return res;
     }    
     std::set<std::string> options_groups_printed_already_;

@@ -17,7 +17,8 @@ class ProgramOptionsParser : public AbstractOptionsParser {
     // Use this class for simple set of command line options like: 
     // programname --arg1 --arg2 10 -zxc -v 20 input.txt output.txt
     public:
-        ProgramOptionsParser() = default;
+        ProgramOptionsParser(const std::string& exename) : AbstractOptionsParser(exename) {}
+        ProgramOptionsParser(int argc, char* argv[]) : AbstractOptionsParser(argc, argv) {}
         virtual void addGroup(std::shared_ptr<OptionsGroup> options) {
             if(options->positional.max_total_count() != 0) {
                 for(auto it : groups_) {
@@ -59,8 +60,6 @@ class ProgramOptionsParser : public AbstractOptionsParser {
             return groups_;
         }
 
-        std::string title;
-        std::string description;
         bool activated{false}; //becomes true when parse function succeeded
     private:
         std::vector<std::shared_ptr<OptionsGroup>> groups_;

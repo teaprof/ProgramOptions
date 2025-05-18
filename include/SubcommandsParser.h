@@ -10,7 +10,8 @@ class SubcommandsParser : public AbstractOptionsParser {
     using value_t = std::shared_ptr<ProgramOptionsParser>;
     using subcommands_t = std::map<std::string, value_t>;
     public:
-    SubcommandsParser() : AbstractOptionsParser() {}    
+    SubcommandsParser(const std::string& exename) : AbstractOptionsParser(exename) {}
+    SubcommandsParser(int argc, char* argv[]) : AbstractOptionsParser(argc, argv) {}
     std::shared_ptr<ProgramOptionsParser> push_back(const std::string& subcommand_name, std::shared_ptr<ProgramOptionsParser> val) {
         auto res = subcommands_.emplace(subcommand_name, val);
         if(!res.second) {
@@ -22,7 +23,8 @@ class SubcommandsParser : public AbstractOptionsParser {
     std::shared_ptr<ProgramOptionsParser> operator[](const std::string& subcommand_name) {
         auto pos = subcommands_.find(subcommand_name);
         if(pos == subcommands_.end()) {
-            pos = subcommands_.emplace(subcommand_name, std::make_shared<ProgramOptionsParser>()).first;
+            pos = subcommands_.emplace(subcommand_name, std::make_shared<ProgramOptionsParser>(exename)).first;
+            subcommands_order_.push_back(subcommands_.find(subcommand_name));
         }
         return pos->second;
     }    
@@ -68,7 +70,6 @@ class SubcommandsParser : public AbstractOptionsParser {
         show_default_subcommand_name_ = flag;
     }
 
-    std::string exename{"hypercube"}; /// \todo: exename should be initialized from argv[0], move to AbstractOptionsParser
     bool activated{false}; //becomes true when parse function succeeded
 private:
     subcommands_t subcommands_;    

@@ -6,41 +6,42 @@
 
 class ProgramOptionsPrinter {
     public:
-    std::shared_ptr<AbstractSection> print(ProgramOptionsParser& parser) {
-        auto res = std::make_shared<TextSection>();
-        auto usage = std::make_shared<TextSection>();
-        usage->title_<<"Usage:\n";
-        usage->header_<<"\t"<<shortHelp(parser)<<"\n";
+    std::shared_ptr<Section> print(ProgramOptionsParser& parser) {
+        auto res = std::make_shared<Section>();
+        auto usage = std::make_shared<Section>();
+        usage->title = "Usage";
+        usage->add_paragraph("\t" + shortHelp(parser));
 
-        auto description = std::make_shared<TextSection>();
-        description->title_<<"Detailed description:";
-        description->header_<<parser.program_description;
+        auto description = std::make_shared<Section>();
+        description->title = "Detailed description:";
+        description->add_paragraph(parser.program_description);
 
-        auto details = std::make_shared<TextSection>();
-        details->title_<<"Details:";
+        auto details = std::make_shared<Section>();
+        details->title = "Details:";
         for(auto& group : parser.groups()) {
-            details->subsections_.push_back(print(*group));
+            details->items.push_back(print(*group));
         }
 
-        res->subsections_.push_back(usage);
-        res->subsections_.push_back(description);
-        res->subsections_.push_back(details);
+        res->items.push_back(usage);
+        res->items.push_back(description);
+        res->items.push_back(details);
         return res;
     }
     std::string shortHelp(ProgramOptionsParser& parser) const {
         std::stringstream str;
+        str<<parser.exename<<" ";
         for(auto group : parser.groups()) {
             str<<"["<<group->groupName()<<"] ";
         }        
         return str.str();
     }
-    std::shared_ptr<AbstractSection> print(OptionsGroup& grp) const {
-        auto res = std::make_shared<TextSection>();
-        res->setTitle(grp.groupName());
-        res->setHeader(grp.description.view());
-        res->body_<<grp.detailedList().view();
+    std::shared_ptr<Section> print(OptionsGroup& grp) const {
+        auto res = std::make_shared<Section>();
+        res->title = grp.groupName();
+        res->add_paragraph(grp.description.str());
+        res->add_paragraph(grp.detailedList().str());
         return res;
     }    
     std::set<std::string> options_groups_printed_already_;
 };
-#endif __PROGRAM_OPTIONS_PRINTER_H__
+#endif // __PROGRAM_OPTIONS_PRINTER_H__

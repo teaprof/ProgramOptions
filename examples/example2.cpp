@@ -1,9 +1,8 @@
-#include <ProgramOptions.h>
-#include <gtest/gtest.h>
+#include<ProgramOptions.h>
 
-TEST(PROGRAMMODEOPTIONS, PARSE) {
+int main(int argc, char* argv[]) {
     namespace po = boost::program_options;
-    SubcommandsParser subcommands_parser("programname");
+    SubcommandsParser subcommands_parser(argc, argv);
     auto runOptions = std::make_shared<OptionsGroup>("run group");
     size_t dim;
     runOptions->addPartialVisible("dim,d", po::value<size_t>(&dim)->default_value(2), "hypercube dimension");
@@ -18,19 +17,11 @@ TEST(PROGRAMMODEOPTIONS, PARSE) {
     subcommands_parser["gather"]->addGroup(gatherOptions);
     subcommands_parser["gather"]->addGroup(commonOptions);
 
-    const char* argv1[] = {"prgmname", "run", "-d", "10",  "-c", "20"};
-    subcommands_parser.parse(6, argv1);
-    ASSERT_EQ(dim, 10);
-    ASSERT_EQ(common_value, 20);
+    ProgramSubcommandsPrinter printer;
+    auto dom = printer.print(subcommands_parser);
 
-    const char* argv2[] = {"prgmname", "gather", "-g", "15",  "-c", "30"};
-    subcommands_parser.parse(6, argv2);
-    ASSERT_EQ(gather_opt, 15);
-    ASSERT_EQ(common_value, 30);
-
-    const char* argv3[] = {"prgmname", "run", "-g", "15",  "-c", "30"};
-    EXPECT_THROW ({
-            subcommands_parser.parse(6, argv3);
-        },
-    po::unknown_option);
+    PrettyPrinter pp;
+    dom->accept(pp);
+    return 0;
 }
+
