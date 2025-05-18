@@ -5,7 +5,7 @@
 #include <thread>
 #include <vector>
 #include <iostream>
-#include <PrettyPrinter/PrettyPrinter.h>
+#include <Printers/PrettyPrinter.h>
 #include <ProgramOptions.h>
 
 class HelpOptions : public OptionsGroup {

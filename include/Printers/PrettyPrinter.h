@@ -1,7 +1,7 @@
 #ifndef __PRETTY_PRINTER_H__
 #define __PRETTY_PRINTER_H__
 
-#include <PrettyPrinter/AbstractTextSection.h>
+#include <Printers/AbstractTextSection.h>
 
 #include <sstream>
 #include <string>
@@ -10,12 +10,12 @@
 #include <locale>
 #include <memory>
 
-class TextSectionAutoBody : public TextSectionBase { /// \todo: rename to TextSectionAbstractBody or simply remove
+class TextSectionAbstractBody : public AbstractSection { /// \todo: rename to TextSectionAbstractBody or simply remove
     public:
     std::stringstream title_;
     std::stringstream header_;
     std::stringstream footer_;    
-    std::vector<std::shared_ptr<TextSectionBase>> subsections_;
+    std::vector<std::shared_ptr<AbstractSection>> subsections_;
     void setTitle(const std::string_view& str) {
         title_.clear();
         title_<<str;
@@ -44,12 +44,12 @@ class TextSectionAutoBody : public TextSectionBase { /// \todo: rename to TextSe
         res<<footer_.str();
         return res;
     }
-    std::vector<std::shared_ptr<TextSectionBase>> subsections() const  override {
+    std::vector<std::shared_ptr<AbstractSection>> subsections() const  override {
         return subsections_;
     }
 };
 
-class TextSection : public TextSectionAutoBody {
+class TextSection : public TextSectionAbstractBody {
     public:
     std::stringstream body_;
        
@@ -64,11 +64,11 @@ class TextSection : public TextSectionAutoBody {
 class PrettyPrinter {
     public:
 
-    static void print(const TextSectionBase& section) {
+    static void print(const AbstractSection& section) {
         print(section, 0);
     }
 
-    static void print(const TextSectionBase& section, size_t level) {
+    static void print(const AbstractSection& section, size_t level) {
         printTitle(level, section.title());
         /*if(!title.view().empty())
             level++;*/
