@@ -5,6 +5,10 @@
 #include <vector>
 #include <memory>
 
+namespace program_options_heavy {
+
+namespace printers {
+
 class AbstractItem;
 class Paragraph;
 class UnorderedList;
@@ -53,6 +57,8 @@ class Section : public AbstractItem {
     }    
 };
 
+} /* namespace printers */
 
+} /* namespace program_options_heavy */
 
 #endif // __ABSTRACT_TEXT_SECTION__

@@ -1,5 +1,11 @@
-#include <ProgramOptions.h>
+#include <ProgramOptionsHeavy.h>
 #include <gtest/gtest.h>
+
+using program_options_heavy::SubcommandsParser;
+using program_options_heavy::OptionsGroup;
+using program_options_heavy::printers::ProgramSubcommandsPrinter;
+using program_options_heavy::printers::PrettyPrinter;
+
 
 TEST(PROGRAMMODEOPTIONS, PARSE) {
     namespace po = boost::program_options;

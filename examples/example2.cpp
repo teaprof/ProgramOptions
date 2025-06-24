@@ -1,6 +1,11 @@
-#include<ProgramOptions.h>
+#include<ProgramOptionsHeavy.h>
 
-int main(int argc, char* argv[]) {
+using program_options_heavy::SubcommandsParser;
+using program_options_heavy::OptionsGroup;
+using program_options_heavy::printers::ProgramSubcommandsPrinter;
+using program_options_heavy::printers::PrettyPrinter;
+
+int main(int argc, const char* argv[]) {
     namespace po = boost::program_options;
     SubcommandsParser subcommands_parser(argc, argv);
     auto runOptions = std::make_shared<OptionsGroup>("run group");

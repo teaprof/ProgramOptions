@@ -4,10 +4,12 @@
 #include <boost/program_options.hpp>
 #include <filesystem>
 
+namespace program_options_heavy {
+
 class AbstractOptionsParser  {
 public:
     AbstractOptionsParser(const std::string& exename_) : exename{exename_} {}
-    AbstractOptionsParser(int argc, char* argv[]) {
+    AbstractOptionsParser(int argc, const char* argv[]) {
         if(argc > 0) {
             std::filesystem::path path(argv[0]);
             exename = path.filename();
@@ -22,5 +24,6 @@ public:
     std::string program_description;
 };
 
+} /* namespace program_options_heavy */
 
 #endif // __ABSTRACT_OPTIONS_PARSER_H__

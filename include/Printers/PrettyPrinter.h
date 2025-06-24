@@ -10,6 +10,10 @@
 #include <locale>
 #include <memory>
 
+namespace program_options_heavy {
+
+namespace printers {
+
 
 class PrettyPrinter : public DocumentVisitor {
     public:
@@ -112,5 +116,10 @@ class PrettyPrinter : public DocumentVisitor {
         return "\033[0m";
     }
 };
+
+} /* namespace printers */
+
+} /* namespace program_options_heavy */
+
 
 #endif

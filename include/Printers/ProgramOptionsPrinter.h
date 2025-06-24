@@ -1,8 +1,12 @@
 #ifndef __PROGRAM_OPTIONS_PRINTER_H__
 #define __PROGRAM_OPTIONS_PRINTER_H__
 
-#include <ProgramOptionsParser.h>
+#include <Parsers/ProgramOptionsParser.h>
 #include <Printers/PrettyPrinter.h>
+
+namespace program_options_heavy {
+
+namespace printers {
 
 class ProgramOptionsPrinter {
     public:
@@ -44,4 +48,9 @@ class ProgramOptionsPrinter {
     }    
     std::set<std::string> options_groups_printed_already_;
 };
+
+} /* namespace printers */
+
+} /* namespace program_options_heavy */
+
 #endif // __PROGRAM_OPTIONS_PRINTER_H__

@@ -6,7 +6,9 @@
 #include <vector>
 #include <iostream>
 #include <Printers/PrettyPrinter.h>
-#include <ProgramOptions.h>
+#include <ProgramOptionsHeavy.h>
+
+namespace program_options_heavy {
 
 class HelpOptions : public OptionsGroup {
     public:
@@ -44,6 +46,7 @@ class MultithreadOptions : public OptionsGroup {
         boost::optional<size_t> nthreads_;
 };
 
+} /* namespace program_options_heavy */
 
 
 #endif

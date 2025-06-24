@@ -1,8 +1,8 @@
 #ifndef __PROGRAM_OPTIONS_PARSER_H__
 #define __PROGRAM_OPTIONS_PARSER_H__
 
-#include <AbstractOptionsParser.h>
-#include <OptionsGroup.h>
+#include <Parsers/AbstractOptionsParser.h>
+#include <Parsers/OptionsGroup.h>
 
 #include <map>
 #include <string> 
@@ -12,13 +12,15 @@
 #include <locale>
 #include <set>
 
+namespace program_options_heavy {
+
 class ProgramOptionsParser : public AbstractOptionsParser {
     // This class can parse the list of options and print the help message
     // Use this class for simple set of command line options like: 
     // programname --arg1 --arg2 10 -zxc -v 20 input.txt output.txt
     public:
-        ProgramOptionsParser(const std::string& exename) : AbstractOptionsParser(exename) {}
-        ProgramOptionsParser(int argc, char* argv[]) : AbstractOptionsParser(argc, argv) {}
+        ProgramOptionsParser(const std::string& exename = "") : AbstractOptionsParser(exename) {}
+        ProgramOptionsParser(int argc, const char* argv[]) : AbstractOptionsParser(argc, argv) {}
         virtual void addGroup(std::shared_ptr<OptionsGroup> options) {
             if(options->positional.max_total_count() != 0) {
                 for(auto it : groups_) {
@@ -64,5 +66,8 @@ class ProgramOptionsParser : public AbstractOptionsParser {
     private:
         std::vector<std::shared_ptr<OptionsGroup>> groups_;
 };
+
+} /* namespace program_options_heavy */
+
 
 #endif // __PROGRAM_OPTIONS_PARSER_H__

@@ -6,6 +6,7 @@
 
 #include <cstdint>
 
+namespace program_options_heavy {
 
 class OptionsGroup {
     public:
@@ -76,6 +77,8 @@ class OptionsGroup {
         std::string group_name_;
         //bool not_specified_{true}; // true if none of the positional or partial options are specified
 };
+
+} /* namespace program_options_heavy */
 
 
 #endif //__OPTIONS_GROUP_H__
